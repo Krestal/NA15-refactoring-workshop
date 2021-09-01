@@ -49,6 +49,11 @@ private:
 
     Direction m_currentDirection;
     std::list<Segment> m_segments;
+    bool isItLostByEatingYourself(const Segment & newHead);
+    bool doWeGetPoint(const Segment& newHead);
+    bool isItLostByCrossingTheBorder(const Segment & newHead);
+    void updateSegments(const Segment& newHead);
+    void updateBody(const Segment & newHead);
 };
 
 } // namespace Snake
