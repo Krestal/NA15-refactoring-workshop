@@ -33,10 +33,12 @@ public:
     void receive(std::unique_ptr<Event> e) override;
 
 private:
+    bool paused=0;
     void handleTimePassed(const TimeoutInd&);
     void handleDirectionChange(const DirectionInd&);
     void handleFoodPositionChange(const FoodInd& receivedFood);
     void handleNewFood(const FoodResp& requestedFood);
+    void handlePause(const PauseInd& pauseInd);
 
     struct Segment
     {
@@ -55,7 +57,6 @@ private:
     void repaintTile(unsigned int x, unsigned int y, Cell type);
 
     void cleanNotExistingSnakeSegments();
-
 
     IPort& m_displayPort;
     IPort& m_foodPort;

@@ -1,5 +1,6 @@
 #include "SnakeController.hpp"
 
+#include <memory>
 #include <algorithm>
 #include <sstream>
 
@@ -101,7 +102,7 @@ void Controller::handleDirectionChange(const DirectionInd& directionInd)
 {
     auto direction = directionInd.direction;
 
-    if ((m_currentDirection & 0b01) != (direction & 0b01)) {
+    if ((m_currentDirection & 0b01) != (direction & 0b01)&&paused==false) {
         m_currentDirection = direction;
     }
 }
@@ -215,7 +216,15 @@ Controller::Segment Controller::getNewHead() const
 
 void Controller::handlePause(const Snake::PauseInd & pauseInd)
 {
-   
+    if(paused==false)
+    {
+    paused=true;
+    //m_displayPort.send(std::make_unique<EventT<PauseInd>>(pauseInd));
+    }
+    else
+    {
+        paused=false;
+    }
 } 
 
 void Controller::receive(std::unique_ptr<Event> e)
@@ -223,7 +232,7 @@ void Controller::receive(std::unique_ptr<Event> e)
     switch(e->getMessageId())
     {
         case PauseInd::MESSAGE_ID: return handlePause(*static_cast<EventT<PauseInd> const&>(*e));
-        case TimeoutInd::MESSAGE_ID: return handleTimePassed(*static_cast<EventT<TimeoutInd> const&>(*e));
+        case TimeoutInd::MESSAGE_ID: if(!paused) {return handleTimePassed(*static_cast<EventT<TimeoutInd> const&>(*e));}
         case DirectionInd::MESSAGE_ID: return handleDirectionChange(*static_cast<EventT<DirectionInd> const&>(*e));
         case FoodInd::MESSAGE_ID: return handleFoodPositionChange(*static_cast<EventT<FoodInd> const&>(*e));
         case FoodResp::MESSAGE_ID: return handleNewFood(*static_cast<EventT<FoodResp> const&>(*e));
