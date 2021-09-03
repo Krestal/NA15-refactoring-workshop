@@ -1,6 +1,8 @@
 #pragma once
 
 #include <utility>
+#include "SnakePosition.hpp"
+#include "WorldDimension.hpp"
 
 namespace Snake
 {
@@ -16,8 +18,8 @@ public:
     bool contains(int x, int y) const;
 
 private:
-    std::pair<int, int> m_foodPosition;
-    std::pair<int, int> m_dimension;
+    Position m_foodPosition;
+    Dimension m_dimension;
 };
 
 } // namespace Snake
