@@ -10,7 +10,7 @@ namespace Snake
 class World
 {
 public:
-    World(std::pair<int, int> dimension, std::pair<int, int> food);
+    World(Dimension dimension, Position food);
 
     void setFoodPosition(std::pair<int, int> position);
     std::pair<int, int> getFoodPosition() const;
