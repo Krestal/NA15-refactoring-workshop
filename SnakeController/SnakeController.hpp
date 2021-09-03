@@ -54,6 +54,14 @@ private:
     bool isItLostByCrossingTheBorder(const Segment & newHead);
     void updateSegments(const Segment& newHead);
     void updateBody(const Segment & newHead);
+    void directionHandler(const Snake::Direction & direction);
+    void updateHead(const Segment& currentHead, Segment & newHead);
+    void timeoutHandler();
+    void placeNewFood(Snake::FoodResp requestedFood);
+    bool isFoodCollidedWithSnake(Snake::FoodInd receivedFood);
+    void newFoodHandler(Snake::FoodInd receivedFood);
+    void placeFoodHandler(Snake::FoodResp requestedFood);
+    void placeNewFood(Snake::FoodInd receivedFood);
 };
 
 } // namespace Snake
