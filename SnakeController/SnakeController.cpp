@@ -1,5 +1,5 @@
 #include "SnakeController.hpp"
-
+#include <iostream>
 #include <algorithm>
 #include <sstream>
 
@@ -100,7 +100,6 @@ void Controller::handleTimePassed(const TimeoutInd&)
 void Controller::handleDirectionChange(const DirectionInd& directionInd)
 {
     auto direction = directionInd.direction;
-
     if ((m_currentDirection & 0b01) != (direction & 0b01)) {
         m_currentDirection = direction;
     }
@@ -217,25 +216,16 @@ void Controller::receive(std::unique_ptr<Event> e)
 {
     switch(e->getMessageId())
     {
-        case 0x20:
-            handleTimePassed(*((TimeoutInd*) &*e));
-        break;
-        case 0x10:
-            handleDirectionChange(*((DirectionInd*) &*e));
-        break;
-        case 0x40:
-            handleFoodPositionChange(*((FoodInd*) &*e));
-        break;
-        case 0x42:
-            handleNewFood(*((FoodResp*) &*e));
-        break;
-        default:
-        throw UnexpectedEventException();
+        case Snake::TimeoutInd::MESSAGE_ID: return handleTimePassed(*static_cast<EventT<TimeoutInd> const&> (*e));
+        case Snake::DirectionInd::MESSAGE_ID: return handleDirectionChange(*static_cast<EventT<DirectionInd> const &> (*e));
+        case Snake::FoodInd::MESSAGE_ID: return handleFoodPositionChange(*static_cast<EventT<FoodInd> const &> (*e));
+        case Snake::FoodResp::MESSAGE_ID: return handleNewFood(*static_cast<EventT<FoodResp> const &> (*e));
+        default: throw UnexpectedEventException();
         break;
     }
 
     // try {
-    //     (*dynamic_cast<EventT<TimeoutInd> const&>(*e));
+    //(*dynamic_cast<EventT<TimeoutInd> const&>(*e));
     // } catch (std::bad_cast&) {
     //     try {
     //         handleDirectionChange(*dynamic_cast<EventT<DirectionInd> const&>(*e));
